@@ -58,6 +58,11 @@ export default function App() {
     );
   }
 
+  const filteredProducts = size ?
+    products.filter((p) => p.skus.find((s) => s.size === parseInt(size))) :
+    products;
+
+
   return (
     <>
       <div className="content">
@@ -77,7 +82,7 @@ export default function App() {
             </select>
           </section>
           <section id="products">
-            {products.map(renderProduct)}
+            {filteredProducts.map(renderProduct)}
           </section>
         </main>
       </div>
