@@ -13,7 +13,6 @@ export default function App() {
 
   useEffect(() => {
     async function init() {
-
       try {
         const response = await getProducts("shoes");
         setProducts(response);
