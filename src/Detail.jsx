@@ -14,8 +14,6 @@ const Detail = ({addToCart}) => {
   if (!product) return <PageNotFound/>;
   if (error) throw error;
 
-  const sizeArray = product.skus.map(s => s.size);
-
   return (
     <div id="detail">
       <h1>{product.name}</h1>
