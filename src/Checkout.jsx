@@ -18,6 +18,7 @@ export default function Checkout({ cart, emptyCart }) {
   const [address, setAddress] = useState(emptyAddress);
   const [status, setStatus] = useState(STATUS.IDLE);
   const [saveError, setSaveError] = useState(null);
+  const [touched, setTouched] = useState({});
 
   // Derived state
   const errors = getErrors(address);
@@ -25,7 +26,7 @@ export default function Checkout({ cart, emptyCart }) {
 
   const handleChange = (e) => {
     e.persist();
-    setAddress((currAddress) => {
+    setAddress(currAddress => {
       return {
         ...currAddress,
         [e.target.id]: e.target.value,
@@ -34,8 +35,11 @@ export default function Checkout({ cart, emptyCart }) {
   };
 
   const handleBlur = (event) => {
-    // TODO
-  }
+    event.persist();
+    setTouched(cur => {
+      return {...cur, [event.target.id]: true}
+    });
+  };
 
   const handleSubmit = async (event) =>  {
     event.preventDefault();
@@ -91,6 +95,9 @@ export default function Checkout({ cart, emptyCart }) {
             onBlur={handleBlur}
             onChange={handleChange}
           />
+          <p role="alert">
+            {(touched.city || status === STATUS.SUBMITTED) && errors.city}
+          </p>
         </div>
 
         <div>
@@ -108,6 +115,9 @@ export default function Checkout({ cart, emptyCart }) {
             <option value="United Kingdom">United Kingdom</option>
             <option value="USA">USA</option>
           </select>
+          <p role="alert">
+            {(touched.country || status === STATUS.SUBMITTED) && errors.country}
+          </p>
         </div>
 
         <div>
