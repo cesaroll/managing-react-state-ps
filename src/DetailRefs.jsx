@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useFetch from "./services/useFetch";
 import Spinner from "./Spinner";
@@ -6,8 +6,8 @@ import PageNotFound from "./PageNotFound";
 
 const Detail = ({addToCart}) => {
   const {id} = useParams();
+  const skuRef = useRef();
   const navigate = useNavigate();
-  const [sku, setSku] = useState("");
   const {data: product, loading, error} = useFetch(`products/${id}`);
 
   if (loading) return <Spinner/>;
@@ -22,8 +22,7 @@ const Detail = ({addToCart}) => {
 
       <select
         id="size"
-        value={sku}
-        onChange={(e) => setSku(e.target.value)}
+        ref={skuRef}
       >
         <option value="">What size?</option>
         {product.skus.map(s => (
@@ -33,9 +32,10 @@ const Detail = ({addToCart}) => {
 
       <p>
         <button
-          disabled={!sku}
           className="btn btn-primary"
           onClick={() => {
+            const sku = skuRef.current.value;
+            if (!sku) return alert("Select size.");
             addToCart(id, sku);
             navigate("/cart");
           }}
